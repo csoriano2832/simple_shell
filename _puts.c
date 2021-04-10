@@ -31,3 +31,6 @@ int _strlen(char *str)
 
 	return (bytes);
 }
+
+
+
