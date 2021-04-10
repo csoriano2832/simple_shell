@@ -3,13 +3,12 @@
 /**
  * main - runs a "simple" command line interpreter
  *
- *
+ * Return: Always 0 (Sucess)
  */
 int main(void)
 {
-	char *line;
-	char **args;
-	int interactive = isatty(STDIN_FILENO);
+	char *line, **args;
+	int flag, interactive = isatty(STDIN_FILENO);
 
 	do {
 
@@ -35,35 +34,48 @@ int main(void)
 		else
 		{
 			args = string_to_args(line);
-
-			spawn_process(args);
-
+			flag = spawn_process(args);
+			if (flag == 1)
+			{
+				perror("execution fail");
+				free(line);
+				free(args);
+				exit(EXIT_FAILURE);
+			}
 			free(args);
 		}
 		free(line);
-
 	} while (interactive);
-
 	return (0);
 }
 
 /**
  * get_input - reads user input and stores into a buffer
  *
- *
+ * Return: The line read from stdin as a string
  */
 char *get_input(void)
 {
 	char *buffer = NULL;
-	size_t bufsize = 0;
+	size_t bufsize = 1024;
 	int bytesRead = 0;
 
-	bytesRead = getline(&buffer, &bufsize, stdin);
-	if (bytesRead == -1)
+	buffer = malloc(sizeof(char) * bufsize);
+
+	bytesRead = read(STDIN_FILENO, buffer, bufsize);
+
+	if (bytesRead == 0)
 	{
-		perror("Error: getting input");
+		_putchar('\n');
+		free(buffer);
+		exit(EXIT_SUCCESS);
+	}
+	else if (bytesRead == -1)
+	{
+		perror("Error: could not read");
 		exit(EXIT_FAILURE);
 	}
+
 	buffer[bytesRead - 1] = '\0';
 	fflush(stdin);
 
@@ -72,8 +84,9 @@ char *get_input(void)
 
 /**
  * string_to_args - splits string from buffer into single worded arguments
+ * @line: a command with optional arguments
  *
- *
+ * Return: An array of word separated tokens from line
  */
 char **string_to_args(char *line)
 {
@@ -99,13 +112,14 @@ char **string_to_args(char *line)
 
 /**
  * spawn_process - creates a child process and executes a command
+ * @args: an array of single worded arguments
  *
- *
+ * Return: 0 if process executed succesfully, otherwise 1.
  */
-void spawn_process(char *args[])
+int spawn_process(char *args[])
 {
 	pid_t forkedPid;
-	int wstatus;
+	int status = 0, wstatus;
 
 	forkedPid = fork();
 	if (forkedPid == -1)
@@ -117,13 +131,14 @@ void spawn_process(char *args[])
 	{
 		if (execve(args[0], args, NULL) == -1)
 		{
-			perror("Error: executing command");
-			free(args);
-			exit(EXIT_FAILURE);
+			status = 1;
+			return (status);
 		}
 	}
 	else
 	{
 		wait(&wstatus);
 	}
+
+	return (status);
 }
