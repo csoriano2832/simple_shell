@@ -8,13 +8,15 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+extern char **environ;
+
 int _putchar(char c);
 int _puts(char *str);
 int _strlen(char *str);
-void print_prompt();
-char *get_input();
+int _strcmp(char *str1, char *str2);
+char *get_input(void);
+char **string_to_args(char *line);
 void spawn_process(char *args[]);
-char **string_to_args(char *string);
-void free_args(char **args);
+char *_getenv(const char *name);
 
 #endif

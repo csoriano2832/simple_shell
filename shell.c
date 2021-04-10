@@ -5,30 +5,45 @@
  *
  *
  */
-int main(int argc, char *argv[])
+int main(void)
 {
-	char *string = NULL;
-	char **args = NULL;
-	int interactive = 0;
-	(void) argc;
-	(void) argv;
+	char *line;
+	char **args;
+	int interactive = isatty(STDIN_FILENO);
 
 	do {
-	
-		if ((interactive = isatty(STDIN_FILENO)) == 1)
+
+		if (interactive == 1)
 			_puts("($) ");
 
-		string = get_input();
+		line = get_input();
 
-		args = string_to_args(string);
+		if (_strcmp(line, "exit") == 0)
+		{
+			interactive = 0;
+		}
+		else if (_strcmp(line, "env") == 0)
+		{
+			int index;
 
-		spawn_process(args);
+			for (index = 0; environ[index]; index++)
+			{
+				_puts(environ[index]);
+				_putchar('\n');
+			}
+		}
+		else
+		{
+			args = string_to_args(line);
 
-		free(string);
-		free(args);
-	
+			spawn_process(args);
+
+			free(args);
+		}
+		free(line);
+
 	} while (interactive);
-	
+
 	return (0);
 }
 
@@ -37,13 +52,20 @@ int main(int argc, char *argv[])
  *
  *
  */
-char *get_input()
+char *get_input(void)
 {
 	char *buffer = NULL;
 	size_t bufsize = 0;
+	int bytesRead = 0;
 
-	if (getline(&buffer, &bufsize, stdin) == -1)
-		perror("prompt");
+	bytesRead = getline(&buffer, &bufsize, stdin);
+	if (bytesRead == -1)
+	{
+		perror("Error: getting input");
+		exit(EXIT_FAILURE);
+	}
+	buffer[bytesRead - 1] = '\0';
+	fflush(stdin);
 
 	return (buffer);
 }
@@ -53,20 +75,24 @@ char *get_input()
  *
  *
  */
-char **string_to_args(char *string)
+char **string_to_args(char *line)
 {
 	char **args;
 	int index;
 	char delim[] = "\n ";
 
-	args = (char **) malloc(100 * sizeof(char *));
+	args = malloc(100 * sizeof(char *));
+	if (args == NULL)
+		exit(EXIT_FAILURE);
 
-	args[0] = strtok(string, delim);
+	args[0] = strtok(line, delim);
 
 	for (index = 0; args[index] != NULL; index++)
 	{
 		args[index + 1] = strtok(NULL, delim);
 	}
+
+	args[index + 1] = NULL;
 
 	return (args);
 }
@@ -79,19 +105,25 @@ char **string_to_args(char *string)
 void spawn_process(char *args[])
 {
 	pid_t forkedPid;
-	int status;
+	int wstatus;
 
 	forkedPid = fork();
-	if (forkedPid == -1) 
-		perror("spawn_process");
+	if (forkedPid == -1)
+	{
+		perror("Error: forking");
+	}
 
 	if (forkedPid == 0)
 	{
-		if (execve(args[0], args, NULL) == -1) 
-			perror("spawn_process");
+		if (execve(args[0], args, NULL) == -1)
+		{
+			perror("Error: executing command");
+			free(args);
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
-		wait(&status);
+		wait(&wstatus);
 	}
 }
