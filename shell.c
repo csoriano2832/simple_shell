@@ -7,41 +7,65 @@
  */
 int main(void)
 {
-	char *line, **args;
-	int flag, interactive = isatty(STDIN_FILENO);
+	char *line, **args, *path, **dirs, *fullPath;
+	int idx = 0, flag = 0, pathFound, interactive = isatty(STDIN_FILENO);
+	struct stat st;
 
 	do {
-
 		if (interactive == 1)
-			_puts("($) ");
+			_puts("$ ");
 
 		line = get_input();
 
 		if (_strcmp(line, "exit") == 0)
-		{
 			interactive = 0;
-		}
+
 		else if (_strcmp(line, "env") == 0)
 		{
-			int index;
-
-			for (index = 0; environ[index]; index++)
+			for (idx = 0; environ[idx]; idx++)
 			{
-				_puts(environ[index]);
+				_puts(environ[idx]);
 				_putchar('\n');
 			}
 		}
 		else
 		{
 			args = string_to_args(line);
+			path = _getenv("PATH");
+			dirs = _getpath(path);
+
+			idx = 0;
+			pathFound = 0;
+			while (dirs[idx])
+			{
+				fullPath = _strcat(dirs[idx], args[0]);
+				if (stat(fullPath, &st) == 0)
+				{
+					args[0] = fullPath;
+					pathFound = 1;
+					break;
+				}
+				else
+				{
+					free(fullPath);
+					idx++;
+				}
+			}
+
 			flag = spawn_process(args);
 			if (flag == 1)
 			{
-				perror("execution fail");
-				free(line);
+				perror(args[0]);
+				free(dirs);
+				free(path);
 				free(args);
+				free(line);
 				exit(EXIT_FAILURE);
 			}
+			if (pathFound == 1)
+				free(fullPath);
+			free(dirs);
+			free(path);
 			free(args);
 		}
 		free(line);
@@ -94,7 +118,7 @@ char **string_to_args(char *line)
 	int index;
 	char delim[] = "\n ";
 
-	args = malloc(100 * sizeof(char *));
+	args = malloc(sizeof(char *) * 100);
 	if (args == NULL)
 		exit(EXIT_FAILURE);
 

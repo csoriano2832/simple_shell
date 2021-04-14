@@ -2,7 +2,9 @@
 
 /**
  * _puts - writes a string of characters to stdout
+ * @str: string to print
  *
+ * Return: numbers of characters printed
  */
 int _puts(char *str)
 {
@@ -11,7 +13,9 @@ int _puts(char *str)
 
 /**
  * _putchar - writes a single character to stdout
+ * @c: character to print
  *
+ * Return: 1 if character was printed
  */
 int _putchar(char c)
 {
@@ -20,14 +24,17 @@ int _putchar(char c)
 
 /**
  * _strlen - gets the length of a string
+ * @str: the string to be evaluated
  *
+ * Return: the length of the string
  */
 int _strlen(char *str)
 {
 
 	int bytes;
 
-	for (bytes = 0; str[bytes] != '\0'; bytes++);
+	for (bytes = 0; str[bytes] != '\0'; bytes++)
+		;
 
 	return (bytes);
 }
@@ -50,6 +57,37 @@ int _strcmp(char *str1, char *str2)
 		if (str1[idx] == '\0')
 			return (0);
 	}
-	
+
 	return (str1[idx] - str2[idx]);
+}
+
+/**
+ * _strdup - returns a duplicate of a given string
+ * @str: a string
+ *
+ * Return: a pointer to the duplicate string
+ */
+char *_strdup(char *str)
+{
+	int idx, len = 0;
+	char *dup;
+
+	if (str == NULL)
+		return (NULL);
+
+	for (idx = 0; str[idx] != '\0'; idx++)
+	{
+		len++;
+	}
+
+	dup = malloc((sizeof(char) * len) + 1);
+	if (dup == NULL)
+		return (NULL);
+
+	for (idx = 0; idx <= len; idx++)
+	{
+		dup[idx] = str[idx];
+	}
+
+	return (dup);
 }
