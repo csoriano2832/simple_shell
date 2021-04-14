@@ -18,7 +18,10 @@ int main(void)
 		line = get_input();
 
 		if (_strcmp(line, "exit") == 0)
-			interactive = 0;
+		{
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
 
 		else if (_strcmp(line, "env") == 0)
 		{
@@ -69,7 +72,7 @@ int main(void)
 			free(args);
 		}
 		free(line);
-	} while (interactive);
+	} while (1);
 	return (0);
 }
 
@@ -81,16 +84,15 @@ int main(void)
 char *get_input(void)
 {
 	char *buffer = NULL;
-	size_t bufsize = 1024;
+	size_t bufsize = 0;
 	int bytesRead = 0;
 
-	buffer = malloc(sizeof(char) * bufsize);
+	bytesRead = getline(&buffer, &bufsize, stdin);
 
-	bytesRead = read(STDIN_FILENO, buffer, bufsize);
-
-	if (bytesRead == 0)
+	if (bytesRead == EOF)
 	{
-		_putchar('\n');
+		if (isatty(STDIN_FILENO) == 1)
+			_putchar('\n');
 		free(buffer);
 		exit(EXIT_SUCCESS);
 	}
