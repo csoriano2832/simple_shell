@@ -14,7 +14,7 @@ git clone https://github.com/csoriano2832/simple_shell.git
 ```
 Compile:
 ```bash
-gcc -Wall -Werror -Wextra -pedantic *.c -o hsh 
+gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 ```
 Execute:
 ```bash
@@ -39,7 +39,7 @@ total 28
 $
 ```
 
-### Files 
+### Files
 
 | File Name | Description |
 | ------ | ------ |
