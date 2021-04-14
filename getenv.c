@@ -96,3 +96,20 @@ char *_strcat(char *dest, char *src)
 
 	return (newDir);
 }
+
+/**
+ * _freeall - frees all alocated memory
+ * @line: user input
+ * @args: input divided into tokens
+ * @path: value of PATH variable in a single string
+ * @dirs: path divided into directories
+ *
+ * Return: nothing
+ */
+void _freeall(char *line, char **args, char *path, char **dirs)
+{
+	free(dirs);
+	free(path);
+	free(args);
+	free(line);
+}

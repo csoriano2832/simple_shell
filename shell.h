@@ -9,8 +9,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 extern char **environ;
+int __attribute((unused)) EXIT_CODE;
 
 /* PROTOTYPES */
 int _putchar(char c);
@@ -24,5 +26,7 @@ char **string_to_args(char *line);
 int spawn_process(char *args[]);
 char *_getenv(const char *name);
 char **_getpath(char *path);
+void _checkbuiltins(char *line);
+void _freeall(char *line, char **args, char *path, char **dirs);
 
 #endif

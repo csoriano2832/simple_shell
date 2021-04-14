@@ -8,70 +8,47 @@
 int main(void)
 {
 	char *line, **args, *path, **dirs, *fullPath;
-	int idx = 0, flag = 0, pathFound, interactive = isatty(STDIN_FILENO);
+	int idx, flag = 0, pathFound, interactive = isatty(STDIN_FILENO);
 	struct stat st;
 
 	do {
 		if (interactive == 1)
 			_puts("$ ");
-
+		
 		line = get_input();
+		_checkbuiltins(line);
 
-		if (_strcmp(line, "exit") == 0)
+		args = string_to_args(line);
+		path = _getenv("PATH");
+		dirs = _getpath(path);
+
+		idx = 0, pathFound = 0;
+		while (dirs[idx])
 		{
-			free(line);
-			exit(EXIT_SUCCESS);
-		}
-
-		else if (_strcmp(line, "env") == 0)
-		{
-			for (idx = 0; environ[idx]; idx++)
+			fullPath = _strcat(dirs[idx], args[0]);
+			if (stat(fullPath, &st) == 0)
 			{
-				_puts(environ[idx]);
-				_putchar('\n');
+				args[0] = fullPath;
+				pathFound = 1;
+				break;
 			}
-		}
-		else
-		{
-			args = string_to_args(line);
-			path = _getenv("PATH");
-			dirs = _getpath(path);
-
-			idx = 0;
-			pathFound = 0;
-			while (dirs[idx])
+			else
 			{
-				fullPath = _strcat(dirs[idx], args[0]);
-				if (stat(fullPath, &st) == 0)
-				{
-					args[0] = fullPath;
-					pathFound = 1;
-					break;
-				}
-				else
-				{
-					free(fullPath);
-					idx++;
-				}
-			}
-
-			flag = spawn_process(args);
-			if (flag == 1)
-			{
-				perror(args[0]);
-				free(dirs);
-				free(path);
-				free(args);
-				free(line);
-				exit(EXIT_FAILURE);
-			}
-			if (pathFound == 1)
 				free(fullPath);
-			free(dirs);
-			free(path);
-			free(args);
+				idx++;
+			}
 		}
-		free(line);
+		
+		flag = spawn_process(args);
+		if (flag == 1)
+		{
+			perror(args[0]);
+			_freeall(line, args, path, dirs);
+			exit(127);
+		}
+		if (pathFound == 1)
+			free(fullPath);
+		_freeall(line, args, path, dirs);
 	} while (1);
 	return (0);
 }
@@ -164,7 +141,38 @@ int spawn_process(char *args[])
 	else
 	{
 		wait(&wstatus);
+		EXIT_CODE = WEXITSTATUS(wstatus);
+	}
+	return (status);
+}
+
+/**
+ * _checkbuiltins - checks if user input equals one of the shell keywords
+ * @line: the user input
+ *
+ * Return: nothing
+ */
+void _checkbuiltins(char *line)
+{
+	int idx;
+
+	if (_strcmp(line, "exit") == 0)
+	{
+		free(line);
+		exit(EXIT_CODE);
 	}
 
-	return (status);
+	else if (_strcmp(line, "env") == 0)
+	{
+		for (idx = 0; environ[idx]; idx++)
+		{
+			_puts(environ[idx]);
+			_putchar('\n');
+		}
+		return;
+	}
+	else
+	{
+		return;
+	}
 }
