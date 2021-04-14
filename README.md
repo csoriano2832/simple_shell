@@ -14,33 +14,32 @@ git clone https://github.com/csoriano2832/simple_shell.git
 ```
 Compile:
 ```bash
-gcc -Wall -Werror -Wextra -pedantic *.c -o shell
+gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 ```
 Execute:
 ```bash
-./shell
+./hsh
 ```
 or in non-interactive mode:
 ```bash
-echo "ls" | ./shell
+echo "ls" | ./hsh
 ```
 ## Example of Use (FIX IT)
 ```bash
 vagrant@vagrant-ubuntu-trusty-64:~/simple_shell$ ./hsh
-($) ls -l
-total 56
--rw-rw-r-- 1 vagrant vagrant   167 Apr 13 16:21 AUTHORS
--rw-rw-r-- 1 vagrant vagrant  2242 Apr 13 16:21 README.md
--rwxrwxr-x 1 vagrant vagrant 13585 Apr 13 16:26 a.out
--rwxrwxr-x 1 vagrant vagrant 13585 Apr 13 16:27 hsh
--rw-rw-r-- 1 vagrant vagrant  1347 Apr 13 16:21 man_1_simple_shell
--rw-rw-r-- 1 vagrant vagrant  2324 Apr 13 16:19 shell.c
--rw-rw-r-- 1 vagrant vagrant   452 Apr 13 16:19 shell.h
--rw-rw-r-- 1 vagrant vagrant   866 Apr 13 16:19 strings.c
-($)
+$ ls -l
+total 28
+-rw-rw-r-- 1 vagrant vagrant  167 Apr 13 16:21 AUTHORS
+-rw-rw-r-- 1 vagrant vagrant 1667 Apr 14 17:09 getenv.c
+-rw-rw-r-- 1 vagrant vagrant 1347 Apr 13 16:21 man_1_simple_shell
+-rw-rw-r-- 1 vagrant vagrant 1934 Apr 13 16:28 README.md
+-rw-rw-r-- 1 vagrant vagrant 2775 Apr 14 17:09 shell.c
+-rw-rw-r-- 1 vagrant vagrant  567 Apr 14 17:09 shell.h
+-rw-rw-r-- 1 vagrant vagrant 1505 Apr 14 17:09 strings.c
+$
 ```
 
-### Files  (FIX IT)
+### Files
 
 | File Name | Description |
 | ------ | ------ |
@@ -51,6 +50,7 @@ total 56
 |_strcmp | Compares characters in two strings|
 |_putchar | Writes a single character to stdout |
 | shell.h | Libraries and prototypes of functions |
+| getenv.c | searches for any existing environment variable |
 
 
 ### Authors
