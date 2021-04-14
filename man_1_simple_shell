@@ -1,0 +1,79 @@
+.TH hsh 1 "April 15 2021" "1.0" "Simple Shell"
+
+
+.SH NAME
+
+.B Simple Shell - hsh
+- command line interpreter or shell
+
+
+.SH SYNOPSIS
+
+.B #include <shell.h>
+
+.B ./hsh
+
+
+.SH DESCRIPTION
+
+Shell is a program written by Ken Thompson in 1971, that takes the command inputs written from the the user’s keyboard and passes them to the machine to execute them through the kernel. It also verifies if the command inputs from the user are correct.
+
+.SH INVOCATION
+
+Compile simple_shell with the GNU Compiler Collection, gcc plus the flags.
+.P
+.RS
+.B $ gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
+.P
+.RE
+Can be run in interactive mode by entering the command "./hsh" on the command line followd by "enter".
+.P
+.RS
+.B $ ./hsh
+.P
+.RE
+Also can be run in non-interactive mode by using a shell scripts. This can involve the use of piping ('|'):
+.P
+.RS
+.B echo 'ls' | ./hsh
+
+.SH EXECUTABLES
+
+Example of executables:
+.IP
+.br
+.\&
+.RS
+\&$ echo "Hello World"
+.br
+\&"Hello World"
+.br
+\&$
+
+
+.SH BUILTINS
+
+The following builtin commands are supported:
+
+.IT
+.B env
+- prints the environment variables
+
+.B exit
+- exits the program
+
+.B setenv
+- sets the environment
+
+.B unsetenv
+- removes elements from the environment
+
+
+.SH BUGS
+Please report any issues to the authors.
+
+.SH AUTHOR
+
+Christopher Soriano <2832@holbertonschool.com>
+
+Oscar Ochart <2386@holbertonschool.com>
