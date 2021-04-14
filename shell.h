@@ -25,7 +25,7 @@ char **string_to_args(char *line);
 int spawn_process(char *args[]);
 char *_getenv(const char *name);
 char **_getpath(char *path);
-void _checkbuiltins(char *line);
+int _checkbuiltins(char *line);
 void _freeall(char *line, char **args, char *path, char **dirs);
 void _sighandler(int sig_num);
 

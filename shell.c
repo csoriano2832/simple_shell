@@ -16,7 +16,8 @@ int main(void)
 		if (interactive == 1)
 			_puts("$ ");
 		line = get_input();
-		_checkbuiltins(line);
+		if (_checkbuiltins(line))
+			continue;
 
 		args = string_to_args(line);
 		path = _getenv("PATH");
@@ -151,7 +152,7 @@ int spawn_process(char *args[])
  *
  * Return: nothing
  */
-void _checkbuiltins(char *line)
+int _checkbuiltins(char *line)
 {
 	int idx;
 
@@ -168,10 +169,10 @@ void _checkbuiltins(char *line)
 			_puts(environ[idx]);
 			_putchar('\n');
 		}
-		return;
+		return (1);
 	}
 	else
 	{
-		return;
+		return (0);
 	}
 }
