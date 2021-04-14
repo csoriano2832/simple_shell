@@ -70,7 +70,7 @@ char *get_input(void)
 		if (isatty(STDIN_FILENO) == 1)
 			_putchar('\n');
 		free(buffer);
-		exit(EXIT_CODE);
+		exit(EXIT_SUCCESS);
 	}
 	else if (bytesRead == -1)
 	{
