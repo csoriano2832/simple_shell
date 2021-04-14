@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <errno.h>
 
 extern char **environ;
 int __attribute((unused)) EXIT_CODE;
@@ -28,5 +27,6 @@ char *_getenv(const char *name);
 char **_getpath(char *path);
 void _checkbuiltins(char *line);
 void _freeall(char *line, char **args, char *path, char **dirs);
+void _sighandler(int sig_num);
 
 #endif

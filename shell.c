@@ -1,4 +1,5 @@
 #include "shell.h"
+void _sighandler(int sig_num);
 
 /**
  * main - runs a "simple" command line interpreter
@@ -14,7 +15,6 @@ int main(void)
 	do {
 		if (interactive == 1)
 			_puts("$ ");
-		
 		line = get_input();
 		_checkbuiltins(line);
 
@@ -38,7 +38,6 @@ int main(void)
 				idx++;
 			}
 		}
-		
 		flag = spawn_process(args);
 		if (flag == 1)
 		{
@@ -71,7 +70,7 @@ char *get_input(void)
 		if (isatty(STDIN_FILENO) == 1)
 			_putchar('\n');
 		free(buffer);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_CODE);
 	}
 	else if (bytesRead == -1)
 	{
