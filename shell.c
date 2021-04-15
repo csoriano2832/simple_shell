@@ -117,7 +117,7 @@ char **string_to_args(char *line)
  * spawn_process - creates a child process and executes a command
  * @args: an array of single worded arguments
  *
- * Return: 0 if process executed succesfully, otherwise 1.
+ * Return: 0 if process executed succesfully, otherwise, 1.
  */
 int spawn_process(char *args[])
 {
@@ -150,7 +150,7 @@ int spawn_process(char *args[])
  * _checkbuiltins - checks if user input equals one of the shell keywords
  * @line: the user input
  *
- * Return: nothing
+ * Return: 1 if input matched one of the builtins, otherwise, 0
  */
 int _checkbuiltins(char *line)
 {
@@ -169,6 +169,7 @@ int _checkbuiltins(char *line)
 			_puts(environ[idx]);
 			_putchar('\n');
 		}
+		free(line);
 		return (1);
 	}
 	else
