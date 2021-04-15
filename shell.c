@@ -15,7 +15,7 @@ int main(void)
 	do {
 		if (interactive == 1)
 			_puts("$ ");
-		
+
 		line = get_input();
 		if (line == NULL)
 			continue;
@@ -69,7 +69,7 @@ char *get_input(void)
 	int bytesRead = 0, idx = 0;
 
 	bytesRead = getline(&buffer, &bufsize, stdin);
-	
+
 	if (bytesRead == EOF)
 	{
 		if (isatty(STDIN_FILENO) == 1)
@@ -83,7 +83,7 @@ char *get_input(void)
 		free(buffer);
 		return (NULL);
 	}
-	
+
 	buffer[bytesRead - 1] = '\0';
 
 	while (buffer[idx] == ' ' || buffer[idx] == '\t')
@@ -91,11 +91,11 @@ char *get_input(void)
 		if (buffer[idx + 1] == '\0')
 		{
 			free(buffer);
-			return(NULL);
+			return (NULL);
 		}
 		idx++;
 	}
-	
+
 	fflush(stdin);
 
 	return (buffer);
