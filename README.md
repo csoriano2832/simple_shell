@@ -43,14 +43,18 @@ $
 
 | File Name | Description |
 | ------ | ------ |
-| shell.c | Executes programs, verify the locations and handles all functions. |
-| string.c | Functions for string manipulation:
+| shell.c | Executes programs, verify the locations and handles all functions |
+| string.c | Functions for string manipulation |
+| shell.h | Libraries and prototypes of functions |
+| getenv.c | searches for any existing environment variable |
 |_puts | Writes a string of characters to stdout |
 |_strlen | Counts the length of a string |
 |_strcmp | Compares characters in two strings|
 |_putchar | Writes a single character to stdout |
-| shell.h | Libraries and prototypes of functions |
-| getenv.c | searches for any existing environment variable |
+|_strdup | returns a duplicate of a given string |
+|_strcat | concatenates two string |
+|_freeall | frees all alocated memory |
+|_getpath | tokenizes the path string into directories |
 
 
 ### Authors
