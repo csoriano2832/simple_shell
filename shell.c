@@ -15,7 +15,11 @@ int main(void)
 	do {
 		if (interactive == 1)
 			_puts("$ ");
+		
 		line = get_input();
+		if (line == NULL)
+			continue;
+
 		if (_checkbuiltins(line))
 			continue;
 
@@ -62,10 +66,10 @@ char *get_input(void)
 {
 	char *buffer = NULL;
 	size_t bufsize = 0;
-	int bytesRead = 0;
+	int bytesRead = 0, idx = 0;
 
 	bytesRead = getline(&buffer, &bufsize, stdin);
-
+	
 	if (bytesRead == EOF)
 	{
 		if (isatty(STDIN_FILENO) == 1)
@@ -73,13 +77,25 @@ char *get_input(void)
 		free(buffer);
 		exit(EXIT_SUCCESS);
 	}
-	else if (bytesRead == -1)
-	{
-		perror("Error: could not read");
-		exit(EXIT_FAILURE);
-	}
 
+	if (bytesRead == 1)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	
 	buffer[bytesRead - 1] = '\0';
+
+	while (buffer[idx] == ' ' || buffer[idx] == '\t')
+	{
+		if (buffer[idx + 1] == '\0')
+		{
+			free(buffer);
+			return(NULL);
+		}
+		idx++;
+	}
+	
 	fflush(stdin);
 
 	return (buffer);
