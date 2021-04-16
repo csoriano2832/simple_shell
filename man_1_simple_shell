@@ -9,8 +9,6 @@
 
 .SH SYNOPSIS
 
-.B #include <shell.h>
-
 .B ./hsh
 
 

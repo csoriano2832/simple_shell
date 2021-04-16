@@ -18,8 +18,8 @@ int main(void)
 		line = get_input();
 		if (_checkbuiltins(line))
 			continue;
-
 		args = string_to_args(line);
+
 		path = _getenv("PATH");
 		dirs = _getpath(path);
 
