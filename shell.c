@@ -15,7 +15,11 @@ int main(void)
 	do {
 		if (interactive == 1)
 			_puts("$ ");
+
 		line = get_input();
+		if (line == NULL)
+			continue;
+
 		if (_checkbuiltins(line))
 			continue;
 		args = string_to_args(line);
@@ -62,7 +66,7 @@ char *get_input(void)
 {
 	char *buffer = NULL;
 	size_t bufsize = 0;
-	int bytesRead = 0;
+	int bytesRead = 0, idx = 0;
 
 	bytesRead = getline(&buffer, &bufsize, stdin);
 
@@ -73,13 +77,25 @@ char *get_input(void)
 		free(buffer);
 		exit(EXIT_SUCCESS);
 	}
-	else if (bytesRead == -1)
+
+	if (bytesRead == 1)
 	{
-		perror("Error: could not read");
-		exit(EXIT_FAILURE);
+		free(buffer);
+		return (NULL);
 	}
 
 	buffer[bytesRead - 1] = '\0';
+
+	while (buffer[idx] == ' ' || buffer[idx] == '\t')
+	{
+		if (buffer[idx + 1] == '\0')
+		{
+			free(buffer);
+			return (NULL);
+		}
+		idx++;
+	}
+
 	fflush(stdin);
 
 	return (buffer);
@@ -117,7 +133,7 @@ char **string_to_args(char *line)
  * spawn_process - creates a child process and executes a command
  * @args: an array of single worded arguments
  *
- * Return: 0 if process executed succesfully, otherwise 1.
+ * Return: 0 if process executed succesfully, otherwise, 1.
  */
 int spawn_process(char *args[])
 {
@@ -150,7 +166,7 @@ int spawn_process(char *args[])
  * _checkbuiltins - checks if user input equals one of the shell keywords
  * @line: the user input
  *
- * Return: nothing
+ * Return: 1 if input matched one of the builtins, otherwise, 0
  */
 int _checkbuiltins(char *line)
 {
@@ -169,6 +185,7 @@ int _checkbuiltins(char *line)
 			_puts(environ[idx]);
 			_putchar('\n');
 		}
+		free(line);
 		return (1);
 	}
 	else
